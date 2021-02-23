@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using contract_manager.Models;
 using contract_manager.Services;
@@ -11,9 +12,11 @@ namespace contract_manager.Controllers
     public class ContractorsController : ControllerBase
     {
         private readonly ContractorsService _serv;
-        public ContractorsController(ContractorsService serv)
+        private readonly JobsService _jserv;
+        public ContractorsController(ContractorsService serv, JobsService jserv)
         {
             _serv = serv;
+            _jserv = jserv;
         }
 
         [HttpGet]
@@ -65,6 +68,18 @@ namespace contract_manager.Controllers
             catch (System.Exception err)
             {
                 return BadRequest(err.Message);
+            }
+        }
+        [HttpGet("{contractorId}/contractorjobs")]
+        public ActionResult<IEnumerable<Job>> GetContracts(int contractorId)
+        {
+            try
+            {
+                return Ok(_jserv.GetJobsByContractorId(contractorId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }

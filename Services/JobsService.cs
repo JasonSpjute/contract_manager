@@ -9,9 +9,11 @@ namespace contract_manager.Services
     public class JobsService
     {
         private readonly JobsRepository _repo;
-        public JobsService(JobsRepository repo)
+        private readonly ContractorsRepository _crepo;
+        public JobsService(JobsRepository repo, ContractorsRepository crepo)
         {
             _repo = repo;
+            _crepo = crepo;
         }
         internal IEnumerable<Job> GetAll()
         {
@@ -40,6 +42,15 @@ namespace contract_manager.Services
             GetById(id);
             _repo.Delete(id);
             return "Successfully Deleted";
+        }
+        internal IEnumerable<Job> GetJobsByContractorId(int contractorId)
+        {
+            Contractor exists = _crepo.Get(contractorId);
+            if (exists == null)
+            {
+                throw new Exception("Invalid Id");
+            }
+            return _repo.GetJobsByContractorId(contractorId);
         }
     }
 }

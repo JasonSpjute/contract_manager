@@ -21,7 +21,6 @@ namespace contract_manager.Services
         }
         internal string Delete(int id)
         {
-            GetById(id);
             _repo.Delete(id);
             return "Successfully Deleted";
         }
