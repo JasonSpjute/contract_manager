@@ -36,8 +36,8 @@ namespace contract_manager
             services.AddTransient<JobsRepository>();
             services.AddTransient<ContractsRepository>();
             services.AddTransient<ContractorsRepository>();
-
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

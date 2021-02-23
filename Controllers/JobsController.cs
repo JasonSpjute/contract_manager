@@ -1,80 +1,70 @@
+using System.Collections.Generic;
+using contract_manager.Models;
+using contract_manager.Services;
+using Microsoft.AspNetCore.Mvc;
+
 namespace contract_manager.Controllers
 {
-    public class JobsController
+
+    [ApiController]
+    [Route("api/[controller]")]
+    public class JobsController : ControllerBase
     {
-        [ApiController]
-        [Route("api/[controller]")]
-        class ModelsController : ControllerBase
+        private readonly JobsService _serv;
+        public JobsController(JobsService serv)
         {
-            private readonly ModelsService _modelsService;
-            public ModelsController(ModelsService modelsService)
-            {
-                _modelsService = modelsService;
-            }
+            _serv = serv;
+        }
 
-            [HttpGet]
-            public ActionResult<IEnumerable<Model>> GetAll()
+        [HttpGet]
+        public ActionResult<IEnumerable<Job>> GetAll()
+        {
+            try
             {
-                try
-                {
-                    return Ok(_modelsService.GetAll());
-                }
-                catch (System.Exception err)
-                {
-                    return BadRequest(err.Message);
-                }
+                return Ok(_serv.GetAll());
             }
-
-            [HttpGet("{id}")]
-            public ActionResult<Model> GetById(int id)
+            catch (System.Exception err)
             {
-                try
-                {
-                    return Ok(_modelsService.GetById(id));
-                }
-                catch (System.Exception err)
-                {
-                    return BadRequest(err.Message);
-                }
+                return BadRequest(err.Message);
             }
+        }
 
-            [HttpPost]
-            public ActionResult<Model> Create([FromBody] Model newModel)
+        [HttpGet("{id}")]
+        public ActionResult<Job> GetById(int id)
+        {
+            try
             {
-                try
-                {
-                    return Ok(_modelsService.Create(newModel));
-                }
-                catch (System.Exception err)
-                {
-                    return BadRequest(err.Message);
-                }
+                return Ok(_serv.GetById(id));
             }
-
-            [HttpPut("{id}")]
-            public ActionResult<Model> Edit(int id, [FromBody] Model editedModel)
+            catch (System.Exception err)
             {
-                try
-                {
-                    return Ok(_modelsService.Edit(id, editedModel));
-                }
-                catch (System.Exception err)
-                {
-                    return BadRequest(err.Message);
-                }
+                return BadRequest(err.Message);
             }
+        }
 
-            [HttpDelete("{id}")]
-            public ActionResult<Model> Delete(int id)
+        [HttpPost]
+        public ActionResult<Job> Create([FromBody] Job newJob)
+        {
+            try
             {
-                try
-                {
-                    return Ok(_modelsService.Delete(id));
-                }
-                catch (System.Exception err)
-                {
-                    return BadRequest(err.Message);
-                }
+                return Ok(_serv.Create(newJob));
+            }
+            catch (System.Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Job> Delete(int id)
+        {
+            try
+            {
+                return Ok(_serv.Delete(id));
+            }
+            catch (System.Exception err)
+            {
+                return BadRequest(err.Message);
             }
         }
     }
